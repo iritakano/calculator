@@ -33,3 +33,14 @@ function operate(operator, num1, num2){
     }
 }
 
+button = document.querySelectorAll('button');
+display = document.querySelector('.display');
+
+button.forEach(button => {
+    button.addEventListener('click', (e) => {
+        let clicked = document.createElement('p');
+        clicked.textContent = e.target.textContent;
+        display.appendChild(clicked);
+    })
+});
+
