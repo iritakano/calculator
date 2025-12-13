@@ -20,16 +20,16 @@ let num2;
 
 function operate(operator, num1, num2){
     if(operator == '+'){
-        add(num1, num2);
+        return add(num1, num2);
     }
     else if(operator == '-'){
-        subtract(num1, num2);
+        return subtract(num1, num2);
     }
     else if(operator == 'x'){
-        multiply(num1, num2);
+        return multiply(num1, num2);
     }
     else if(operator == '÷'){
-        divide(num1, num2);
+        return divide(num1, num2);
     }
 }
 
@@ -51,33 +51,64 @@ button.forEach(button => {
         }
 
         if(operators.includes(e.target.textContent)){
-            if(operator != ''){
-                numbers.pop();
-                display.removeChild(display.lastChild);
+            if(operator == ''){
+                operator = e.target.textContent;
+                numbers.push(e.target.textContent);
+                display.appendChild(clicked);
             }
 
-            operator = e.target.textContent;
-            numbers.push(e.target.textContent);
-            display.appendChild(clicked);            
+            else if(operators.includes(numbers[numbers.length - 1])){
+               numbers.pop();
+               display.removeChild(display.lastChild);
+               operator = e.target.textContent;
+               numbers.push(e.target.textContent);
+               display.appendChild(clicked);
+            }
+
+            else if(digits.includes(numbers[numbers.length - 1])){
+                for(let i = 0; i < numbers.length - 1; i++){
+                    if(operators.includes(numbers[i])){
+                        num1 = numbers.slice(0, i).join('');
+                        num2 = numbers.slice(i + 1).join('');
+                    }
+
+                    if(num2 == ''){
+                        num2 = 0;
+                    }
+                }
+
+                let answer = (operate(operator, num1, num2)).toString();
+                numbers = [];
+                display.replaceChildren();
+                numbers.push(answer);
+                clicked.textContent = answer;
+                display.appendChild(clicked);
+                let clickedOperator = document.createElement('p');
+                clickedOperator.textContent = e.target.textContent;
+                numbers.push(clickedOperator.textContent);
+                display.appendChild(clickedOperator);
+            }
         }
 
         if(e.target.textContent == '='){
+            let finalAnswer = document.createElement('p');
             numbers.forEach(button => {
                 if(operators.includes(button)){
-                let operator_index = numbers.indexOf(button);
+                    let operator_index = numbers.indexOf(button);
 
-                num1 = numbers.slice(0, operator_index).join('');
-                num2 = numbers.slice(operator_index + 1).join('');
-                if(num2 == ''){
-                    num2 = 0;
-                }
+                    num1 = numbers.slice(0, operator_index).join('');
+                    num2 = numbers.slice(operator_index + 1).join('');
+                    if(num2 == ''){
+                        num2 = 0;
+                    }
 
-                console.log(operator);
-                console.log("num11", num1);
-                console.log("num2", num2);
+                    finalAnswer.textContent = operate(operator, num1, num2).toString();
+                    display.appendChild(finalAnswer);
                 }
-            })
-        }
+            }) 
+            
+            numbers = undefined;
+        };
     })
 });
 
