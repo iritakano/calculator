@@ -1,22 +1,29 @@
+function roundToFive(num) {
+  const factor = 10 ** 5;
+  return Math.round(num * factor) / factor;
+}
+
 function add(num1, num2){
-    return Number(num1) + Number(num2);
+    return roundToFive(Number(num1) + Number(num2));
 }
 
 function subtract(num1, num2){
-    return Number(num1) - Number(num2);
+    return roundToFive(Number(num1) - Number(num2));
 }
 
 function multiply(num1, num2){
-    return Number(num1) * Number(num2);
+    return roundToFive(Number(num1) * Number(num2));
 }
 
 function divide(num1, num2){
-    return Number(num1) / Number(num2);
+    return roundToFive(Number(num1) / Number(num2));
 }
 
 let num1;
 let operator = '';
 let num2;
+let hasError = false;
+let finished = false;
 
 function operate(operator, num1, num2){
     if(operator == '+'){
@@ -42,16 +49,63 @@ let numbers = [];
 
 button.forEach(button => {
     button.addEventListener('click', (e) => {
+        if(e.target.textContent == 'AC'){
+            hasError = false;
+            finished = false;
+            numbers = [];
+            display.replaceChildren();
+            operator = '';
+        }
+
+        else if(e.target.textContent == 'C'){
+            hasError = false;
+            if(display.lastChild.classList.contains('final')){
+                finished = false;
+                numbers = [];
+                display.replaceChildren();
+                operator = '';
+            }
+
+            else{
+                numbers.pop();
+                display.removeChild(display.lastChild);
+                operator = '';
+            }
+        }
+
+        else if(hasError) return;
+
         let clicked = document.createElement('p');
         clicked.textContent = e.target.textContent;
 
         if(digits.includes(e.target.textContent)){
-            numbers.push(e.target.textContent);
-            display.appendChild(clicked);
+            if(finished){
+                numbers = [e.target.textContent];
+                display.replaceChildren();
+                display.appendChild(clicked);
+                operator = '';
+            }
+
+            else{
+                numbers.push(e.target.textContent);
+                display.appendChild(clicked);
+            }
         }
 
         if(operators.includes(e.target.textContent)){
-            if(operator == ''){
+            finished = false;
+
+            if(numbers.length == 0){
+                let firstNumber = document.createElement('p');
+                firstNumber.textContent = '0';
+                numbers.push(firstNumber.textContent);
+                display.appendChild(firstNumber);
+                operator = e.target.textContent;
+                numbers.push(e.target.textContent);
+                display.appendChild(clicked);
+            }
+
+            else if(operator == ''){
                 operator = e.target.textContent;
                 numbers.push(e.target.textContent);
                 display.appendChild(clicked);
@@ -65,49 +119,93 @@ button.forEach(button => {
                display.appendChild(clicked);
             }
 
+            else if(display.lastChild.classList.contains('final')){
+                numbers = [display.lastChild.textContent];
+                operator = e.target.textContent;
+                numbers.push(operator);
+
+                let answerElement = document.createElement('p');
+                answerElement.textContent = display.lastChild.textContent;
+                display.replaceChildren();
+                display.appendChild(answerElement);
+
+                clicked.textContent = operator;
+                display.appendChild(clicked);
+            }
+
             else if(digits.includes(numbers[numbers.length - 1])){
                 for(let i = 0; i < numbers.length - 1; i++){
                     if(operators.includes(numbers[i])){
                         num1 = numbers.slice(0, i).join('');
                         num2 = numbers.slice(i + 1).join('');
                     }
-
-                    if(num2 == ''){
-                        num2 = 0;
-                    }
                 }
 
-                let answer = (operate(operator, num1, num2)).toString();
-                numbers = [];
-                display.replaceChildren();
-                numbers.push(answer);
-                clicked.textContent = answer;
-                display.appendChild(clicked);
-                let clickedOperator = document.createElement('p');
-                clickedOperator.textContent = e.target.textContent;
-                numbers.push(clickedOperator.textContent);
-                display.appendChild(clickedOperator);
+                if(num2 == ''){
+                        num2 = 0;
+                }
+
+                if(operator == '÷' && num2 == 0){
+                        numbers = [];
+                        display.replaceChildren();
+                        let errorMessage = document.createElement('p');
+                        errorMessage.textContent = "ERROR: DIVISION BY 0";
+                        display.appendChild(errorMessage); 
+                        hasError = true;
+                }
+
+                else{
+                    let answer = (operate(operator, num1, num2)).toString();
+                    numbers = [answer];
+                    operator = e.target.textContent;
+                    numbers.push(operator);
+
+                    let answerElement = document.createElement('p');
+                    answerElement.textContent = answer;
+                    display.replaceChildren();
+                    display.appendChild(answerElement);
+
+                    clicked.textContent = operator;
+                    display.appendChild(clicked);
+                }
             }
         }
 
         if(e.target.textContent == '='){
-            let finalAnswer = document.createElement('p');
-            numbers.forEach(button => {
-                if(operators.includes(button)){
-                    let operator_index = numbers.indexOf(button);
+            if(display.lastChild.classList.contains('final')){
+                finished = true;
+            }
 
-                    num1 = numbers.slice(0, operator_index).join('');
-                    num2 = numbers.slice(operator_index + 1).join('');
-                    if(num2 == ''){
-                        num2 = 0;
+            else{
+                let finalAnswer = document.createElement('p');
+                finalAnswer.classList.add("final");
+
+                for(let i = 0; i < numbers.length - 1; i++){
+                    if(operators.includes(numbers[i])){
+                        num1 = numbers.slice(0, i).join('');
+                        num2 = numbers.slice(i + 1).join('');
                     }
+                }
 
+                if(num2 == ''){
+                    num2 = 0;
+                }
+
+                if(operator == '÷' && num2 == 0){
+                    numbers = [];
+                    display.replaceChildren();
+                    let errorMessage = document.createElement('p');
+                    errorMessage.textContent = "ERROR: DIVISION BY 0";
+                    display.appendChild(errorMessage); 
+                    hasError = true;
+                }
+
+                else{
                     finalAnswer.textContent = operate(operator, num1, num2).toString();
                     display.appendChild(finalAnswer);
+                    finished = true;
                 }
-            }) 
-            
-            numbers = undefined;
+            }
         };
     })
 });
