@@ -44,7 +44,7 @@ let button = document.querySelectorAll('button');
 let display = document.querySelector('.display');
 
 let operators = ['+', '-', 'x', '÷'];
-let digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+let digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.'];
 let numbers = [];
 
 button.forEach(button => {
@@ -58,9 +58,9 @@ button.forEach(button => {
         }
 
         else if(e.target.textContent == 'C'){
-            hasError = false;
             if(display.lastChild.classList.contains('final')){
                 finished = false;
+                hasError = false;
                 numbers = [];
                 display.replaceChildren();
                 operator = '';
@@ -73,13 +73,12 @@ button.forEach(button => {
             }
         }
 
-        else if(hasError) return;
-
         let clicked = document.createElement('p');
         clicked.textContent = e.target.textContent;
 
         if(digits.includes(e.target.textContent)){
-            if(finished){
+            if(finished || hasError){
+                hasError = false;
                 numbers = [e.target.textContent];
                 display.replaceChildren();
                 display.appendChild(clicked);
@@ -94,6 +93,7 @@ button.forEach(button => {
 
         if(operators.includes(e.target.textContent)){
             finished = false;
+            if(hasError) return;
 
             if(numbers.length == 0){
                 let firstNumber = document.createElement('p');
@@ -146,12 +146,12 @@ button.forEach(button => {
                 }
 
                 if(operator == '÷' && num2 == 0){
-                        numbers = [];
-                        display.replaceChildren();
-                        let errorMessage = document.createElement('p');
-                        errorMessage.textContent = "ERROR: DIVISION BY 0";
-                        display.appendChild(errorMessage); 
-                        hasError = true;
+                    numbers = [];
+                    display.replaceChildren();
+                    let errorMessage = document.createElement('p');
+                    errorMessage.textContent = "Undefined";
+                    display.appendChild(errorMessage); 
+                    hasError = true;
                 }
 
                 else{
@@ -195,7 +195,7 @@ button.forEach(button => {
                     numbers = [];
                     display.replaceChildren();
                     let errorMessage = document.createElement('p');
-                    errorMessage.textContent = "ERROR: DIVISION BY 0";
+                    errorMessage.textContent = "Undefined";
                     display.appendChild(errorMessage); 
                     hasError = true;
                 }
