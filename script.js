@@ -102,12 +102,14 @@ button.forEach(button => {
                 display.appendChild(firstNumber);
                 operator = e.target.textContent;
                 numbers.push(e.target.textContent);
+                clicked.classList.add("operatorDisplay");
                 display.appendChild(clicked);
             }
 
             else if(operator == ''){
                 operator = e.target.textContent;
                 numbers.push(e.target.textContent);
+                clicked.classList.add("operatorDisplay");
                 display.appendChild(clicked);
             }
 
@@ -116,6 +118,7 @@ button.forEach(button => {
                display.removeChild(display.lastChild);
                operator = e.target.textContent;
                numbers.push(e.target.textContent);
+               clicked.classList.add("operatorDisplay");
                display.appendChild(clicked);
             }
 
@@ -130,6 +133,7 @@ button.forEach(button => {
                 display.appendChild(answerElement);
 
                 clicked.textContent = operator;
+                clicked.classList.add("operatorDisplay");
                 display.appendChild(clicked);
             }
 
@@ -147,9 +151,9 @@ button.forEach(button => {
 
                 if(operator == '÷' && num2 == 0){
                     numbers = [];
-                    display.replaceChildren();
                     let errorMessage = document.createElement('p');
                     errorMessage.textContent = "Undefined";
+                    errorMessage.classList.add("errorDisplay");
                     display.appendChild(errorMessage); 
                     hasError = true;
                 }
@@ -166,6 +170,7 @@ button.forEach(button => {
                     display.appendChild(answerElement);
 
                     clicked.textContent = operator;
+                    clicked.classList.add("operatorDisplay");
                     display.appendChild(clicked);
                 }
             }
@@ -193,9 +198,9 @@ button.forEach(button => {
 
                 if(operator == '÷' && num2 == 0){
                     numbers = [];
-                    display.replaceChildren();
                     let errorMessage = document.createElement('p');
                     errorMessage.textContent = "Undefined";
+                    errorMessage.classList.add("errorDisplay");
                     display.appendChild(errorMessage); 
                     hasError = true;
                 }
