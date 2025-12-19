@@ -1,0 +1,138 @@
+*{
+    box-sizing: border-box;
+}
+
+:root{
+    --white: #ffe4c4;
+    --blue: #A8C2E0;
+    --red: #903f45;
+}
+
+body{
+    font-size: 16px;
+    background-color: #623d2ead;
+    font-family: quicksand;
+    margin: 0;
+    padding: 0;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.calculator{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 600px;
+    width: 350px;
+    padding: 30px;
+    background-color: var(--red);
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.display{
+    width: 100%;
+    height: 25%;
+    background-color: rgb(36, 36, 36);
+    border-radius: 10px;
+    margin-bottom: 30px;
+    text-align: right;
+    padding: 10px;
+    overflow-x: scroll;
+    white-space: nowrap;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5), 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.display p{
+    display: inline-block;
+    font-size: 1.5rem;
+    margin: 0;
+    color: lightyellow;
+}
+
+.display .final, .display .errorDisplay{
+    display: block;
+    font-size: 2.5rem;
+    margin-top: 20px;
+    font-weight: 800;
+    color: rgb(51, 146, 141);
+}
+
+.operatorDisplay{
+    padding: 0 5px;
+}
+
+.buttons{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: 100%;
+    place-items: center;
+    font-family: quicksand;
+}
+
+button{
+    width: 60px;
+    height: 60px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--white);
+    font-family: quicksand;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+#add{
+    height: 140px;
+    grid-row: span 2;
+    border-radius: 10px;
+}
+
+#equal{
+    grid-column: span 2;
+    width: 140px;
+    border-radius: 10px;
+    background-color: #678a8a;
+}
+
+button:hover{
+    background-color: #968673;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.25);
+}
+
+button:active{
+    background-color: #6b6053;
+    transition: all 0.3s ease;
+    transform: scale(0.95);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.clear{
+    background-color: #9a9a9a;
+}
+
+.clear:hover{
+    background-color: #6c6c6c;
+}
+
+.clear:active{
+    background-color: #3a3939;
+}
+
+
+#equal:hover{
+    background-color: #465e5e
+}
+
+#equal:active{
+    background-color: #394b4b;
+}
